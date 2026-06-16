@@ -2,9 +2,11 @@ using UnityEngine;
 using Photon.Pun;
 using Photon.Realtime;
 using TMPro;
+using System.Collections.Generic;
 
 public class GameManager : MonoBehaviourPunCallbacks
 {
+    private List<RoomInfo> rooms = new List<RoomInfo>();
     [Header("UI")]
     public TMP_InputField inputName;
     public TMP_Text textIndicator;
@@ -20,15 +22,18 @@ public class GameManager : MonoBehaviourPunCallbacks
 
     public TMP_Text salaName;
     public GameObject btnStart;
+    public GameObject btnJoinRoom;
+    public TMP_Text joinRoomText;
 
     private void Start()
     {
-        PhotonNetwork.AutomaticallySyncScene = true;
+        btnJoinRoom.SetActive(false);
         btnCreateRoom.SetActive(false);
         panelLobby.SetActive(false);
         panelStart.SetActive(true);
         panelCreateRoom.SetActive(false);
         btnCreateRoom.SetActive(false);
+        PhotonNetwork.AutomaticallySyncScene = true;
     }
 
     // CONEXIÓN
@@ -56,7 +61,7 @@ public class GameManager : MonoBehaviourPunCallbacks
 
         btnCreateRoom.SetActive(true);
 
-        Debug.Log("Conectado al Master.");
+        PhotonNetwork.JoinLobby();
     }
 
     public override void OnDisconnected(DisconnectCause cause)
@@ -77,7 +82,7 @@ public class GameManager : MonoBehaviourPunCallbacks
         options.PublishUserId = true;
 
         PhotonNetwork.JoinOrCreateRoom(
-            "Sala 1",
+            PhotonNetwork.NickName,
             options,
             TypedLobby.Default
         );
@@ -157,5 +162,29 @@ public class GameManager : MonoBehaviourPunCallbacks
     public void StartGame()
     {
         PhotonNetwork.LoadLevel("GameBase");
+    }
+
+    public override void OnRoomListUpdate(List<RoomInfo> roomList)
+    {
+        rooms = roomList;
+
+        if (rooms.Count > 0)
+        {
+            btnJoinRoom.SetActive(true);
+
+            joinRoomText.text =
+                "Unirse a la sala de " + rooms[0].Name;
+        }
+        else
+        {
+            btnJoinRoom.SetActive(false);
+        }
+    }
+    public void JoinRoom()
+    {
+        if (rooms.Count > 0)
+        {
+            PhotonNetwork.JoinRoom(rooms[0].Name);
+        }
     }
 }

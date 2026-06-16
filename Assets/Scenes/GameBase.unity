@@ -961,7 +961,7 @@ MonoBehaviour:
   maxSpeed: 70
   spinSpeed: 1500
   currentSpin: 0
-  spinDecay: 3
+  spinDecay: 2
   visualPivot: {fileID: 1545112053}
   visualModel: {fileID: 983183808}
   maxTiltAngle: 25
