@@ -23,6 +23,7 @@ public class GameManager : MonoBehaviourPunCallbacks
 
     private void Start()
     {
+        PhotonNetwork.AutomaticallySyncScene = true;
         btnCreateRoom.SetActive(false);
         panelLobby.SetActive(false);
         panelStart.SetActive(true);
@@ -152,5 +153,9 @@ public class GameManager : MonoBehaviourPunCallbacks
 
             texto.text = player.NickName;
         }
+    }
+    public void StartGame()
+    {
+        PhotonNetwork.LoadLevel("GameBase");
     }
 }

@@ -12,6 +12,6 @@ EditorBuildSettings:
     path: Assets/Scenes/MenuOnline.unity
     guid: 2a9d07b0d87954244ae688afae7469e1
   - enabled: 1
-    path: Assets/Scenes/PrototypeArena.unity
+    path: Assets/Scenes/GameBase.unity
     guid: 9fc0d4010bbf28b4594072e72b8655ab
   m_configObjects: {}
