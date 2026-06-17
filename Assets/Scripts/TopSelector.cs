@@ -1,6 +1,10 @@
 using TMPro;
 using UnityEngine;
 
+using Photon.Pun;
+using Photon.Realtime;
+using ExitGames.Client.Photon;
+
 public class TopSelector : MonoBehaviour
 {
     public GameObject[] topPrefabs;
@@ -59,5 +63,15 @@ public class TopSelector : MonoBehaviour
         nameText.text = topNames[currentIndex];
 
         descriptionText.text = descriptions[currentIndex];
+    }
+    public void SeleccionarTop()
+    {
+        Hashtable props = new Hashtable();
+
+        props["TopIndex"] = currentIndex;
+
+        PhotonNetwork.LocalPlayer.SetCustomProperties(props);
+
+        Debug.Log("Seleccionaste el trompo: " + currentIndex);
     }
 }
