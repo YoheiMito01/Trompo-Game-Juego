@@ -1,7 +1,8 @@
 using System.Collections;
 using UnityEngine;
+using Photon.Pun;
 
-public class PowerUpSpawner : MonoBehaviour
+public class PowerUpSpawner : MonoBehaviourPun
 {
     [SerializeField] private GameObject powerUpPrefab;
 
@@ -13,8 +14,13 @@ public class PowerUpSpawner : MonoBehaviour
 
     private void Start()
     {
+        // Solo el Host genera boosts
+        if (!PhotonNetwork.IsMasterClient)
+            return;
+
         StartCoroutine(SpawnRoutine());
     }
+
     private void OnDrawGizmos()
     {
         Gizmos.color = Color.green;
@@ -24,6 +30,7 @@ public class PowerUpSpawner : MonoBehaviour
             new Vector3(arenaSize.x, 0.1f, arenaSize.y)
         );
     }
+
     IEnumerator SpawnRoutine()
     {
         while (true)
@@ -45,8 +52,8 @@ public class PowerUpSpawner : MonoBehaviour
         pos.z += Random.Range(-arenaSize.y / 2f, arenaSize.y / 2f);
         pos.y = 0.5f;
 
-        currentPowerUp = Instantiate(
-            powerUpPrefab,
+        currentPowerUp = PhotonNetwork.Instantiate(
+            powerUpPrefab.name,
             pos,
             Quaternion.identity
         );

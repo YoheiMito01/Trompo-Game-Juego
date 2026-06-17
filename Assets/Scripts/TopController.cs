@@ -1,6 +1,7 @@
 using UnityEngine;
+using Photon.Pun;
 
-public class TopController : MonoBehaviour
+public class TopController : MonoBehaviourPun, IPunObservable
 {
     private Rigidbody rb;
 
@@ -32,18 +33,33 @@ public class TopController : MonoBehaviour
     void Start()
     {
         rb = GetComponent<Rigidbody>();
-        currentSpin = spinSpeed;
+
+        if (photonView.IsMine)
+        {
+            currentSpin = spinSpeed;
+        }
     }
 
     void Update()
     {
+        if (!photonView.IsMine)
+            return;
+
         HandleInput();
     }
 
     void FixedUpdate()
     {
-        MoveTop();
-        HandleSpin();
+        if (photonView.IsMine)
+        {
+            MoveTop();
+            HandleSpin();
+        }
+        else
+        {
+            HandleVisualSpin();
+            HandleWobble();
+        }
     }
 
     void HandleInput()
@@ -58,9 +74,7 @@ public class TopController : MonoBehaviour
             if (Physics.Raycast(ray, out RaycastHit hit))
             {
                 if (hit.transform == transform)
-                {
                     isDragging = true;
-                }
             }
         }
 
@@ -76,7 +90,7 @@ public class TopController : MonoBehaviour
 
             Vector3 direction = mouseWorldPos - transform.position;
 
-            direction.y = 0f;
+            direction.y = 0;
 
             targetDirection = direction.normalized;
         }
@@ -93,7 +107,7 @@ public class TopController : MonoBehaviour
         rb.AddForce(targetDirection * acceleration, ForceMode.Acceleration);
 
         Vector3 flatVelocity = rb.velocity;
-        flatVelocity.y = 0f;
+        flatVelocity.y = 0;
 
         if (flatVelocity.magnitude > maxSpeed)
         {
@@ -102,7 +116,7 @@ public class TopController : MonoBehaviour
             rb.velocity = new Vector3(
                 flatVelocity.x,
                 rb.velocity.y,
-                rb.velocity.z
+                flatVelocity.z
             );
         }
     }
@@ -113,9 +127,11 @@ public class TopController : MonoBehaviour
             return;
 
         currentSpin -= spinDecay * Time.fixedDeltaTime;
+
         currentSpin = Mathf.Max(currentSpin, 0);
 
         HandleVisualSpin();
+
         HandleWobble();
 
         if (currentSpin <= 0)
@@ -155,7 +171,7 @@ public class TopController : MonoBehaviour
             * wobbleAmount;
 
         visualPivot.localRotation =
-            Quaternion.Euler(tiltX, 0f, tiltZ);
+            Quaternion.Euler(tiltX, 0, tiltZ);
     }
 
     void FallOver()
@@ -167,8 +183,12 @@ public class TopController : MonoBehaviour
             ForceMode.Impulse
         );
     }
+
     public void AddSpin(float amount)
     {
+        if (!photonView.IsMine)
+            return;
+
         if (hasFallen)
             return;
 
@@ -179,7 +199,8 @@ public class TopController : MonoBehaviour
     {
         Plane plane = new Plane(Vector3.up, Vector3.zero);
 
-        Ray ray = Camera.main.ScreenPointToRay(Input.mousePosition);
+        Ray ray =
+            Camera.main.ScreenPointToRay(Input.mousePosition);
 
         if (plane.Raycast(ray, out float distance))
         {
@@ -191,23 +212,31 @@ public class TopController : MonoBehaviour
 
     private void OnCollisionEnter(Collision collision)
     {
+        if (!photonView.IsMine)
+            return;
+
         TopController otherTop =
             collision.gameObject.GetComponent<TopController>();
 
         if (otherTop == null)
             return;
 
-        Vector3 hitDirection =
-            (collision.transform.position - transform.position).normalized;
-
-        float impactForce = currentSpin * 0.01f;
-
-        otherTop.rb.AddForce(
-            hitDirection * impactForce,
-            ForceMode.Impulse
-        );
-
         currentSpin -= 50f;
-        otherTop.currentSpin -= 50f;
+    }
+
+    public void OnPhotonSerializeView(
+        PhotonStream stream,
+        PhotonMessageInfo info)
+    {
+        if (stream.IsWriting)
+        {
+            stream.SendNext(currentSpin);
+            stream.SendNext(hasFallen);
+        }
+        else
+        {
+            currentSpin = (float)stream.ReceiveNext();
+            hasFallen = (bool)stream.ReceiveNext();
+        }
     }
 }
