@@ -1,11 +1,10 @@
 using TMPro;
 using UnityEngine;
-
 using Photon.Pun;
 using Photon.Realtime;
 using ExitGames.Client.Photon;
 
-public class TopSelector : MonoBehaviour
+public class TopSelector : MonoBehaviourPunCallbacks
 {
     public GameObject[] topPrefabs;
 
@@ -23,6 +22,11 @@ public class TopSelector : MonoBehaviour
     private int currentIndex = 0;
 
     private GameObject currentTop;
+
+    public GameObject botonSeleccionar;
+
+    private bool selected = false;
+
 
     private void Start()
     {
@@ -66,6 +70,11 @@ public class TopSelector : MonoBehaviour
     }
     public void SeleccionarTop()
     {
+        if (selected)
+            return;
+
+        selected = true;
+
         Hashtable props = new Hashtable();
 
         props["TopIndex"] = currentIndex;
@@ -73,5 +82,33 @@ public class TopSelector : MonoBehaviour
         PhotonNetwork.LocalPlayer.SetCustomProperties(props);
 
         Debug.Log("Seleccionaste el trompo: " + currentIndex);
+
+        ComprobarInicio();
+    }
+    void ComprobarInicio()
+    {
+        if (!PhotonNetwork.IsMasterClient)
+            return;
+
+        foreach (Player player in PhotonNetwork.PlayerList)
+        {
+            if (!player.CustomProperties.ContainsKey("TopIndex"))
+                return;
+        }
+
+        Debug.Log("Todos eligieron.");
+
+        PhotonNetwork.LoadLevel("GameBase");
+    }
+    public override void OnPlayerPropertiesUpdate(
+    Player targetPlayer,
+    ExitGames.Client.Photon.Hashtable changedProps)
+    {
+        if (changedProps.ContainsKey("TopIndex"))
+        {
+            Debug.Log(targetPlayer.NickName + " seleccionó un trompo.");
+
+            ComprobarInicio();
+        }
     }
 }
