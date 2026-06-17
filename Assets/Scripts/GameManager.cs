@@ -161,7 +161,7 @@ public class GameManager : MonoBehaviourPunCallbacks
     }
     public void StartGame()
     {
-        PhotonNetwork.LoadLevel("GameBase");
+        PhotonNetwork.LoadLevel("SelectTopScene");
     }
 
     public override void OnRoomListUpdate(List<RoomInfo> roomList)
