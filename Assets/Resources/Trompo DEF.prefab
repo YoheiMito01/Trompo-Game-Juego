@@ -14,6 +14,7 @@ GameObject:
   - component: {fileID: 2864909698926378269}
   - component: {fileID: 7169736459106576727}
   - component: {fileID: 4107493136877120860}
+  - component: {fileID: -3750413493331558845}
   m_Layer: 0
   m_Name: Trompo DEF
   m_TagString: Untagged
@@ -99,11 +100,11 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 288b0c71560575546b87171cbbc09c26, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  acceleration: 70
-  maxSpeed: 70
+  acceleration: 60
+  maxSpeed: 50
   spinSpeed: 1500
   currentSpin: 0
-  spinDecay: 2
+  spinDecay: 10
   visualPivot: {fileID: 7004784238063486989}
   visualModel: {fileID: 4584525523999449511}
   maxTiltAngle: 25
@@ -126,9 +127,9 @@ MonoBehaviour:
   prefixField: -1
   Synchronization: 3
   OwnershipTransfer: 0
-  observableSearch: 2
+  observableSearch: 0
   ObservedComponents:
-  - {fileID: 4107493136877120860}
+  - {fileID: 2864909698926378269}
   sceneViewId: 0
   InstantiationId: 0
   isRuntimeInstantiated: 0
@@ -148,6 +149,22 @@ MonoBehaviour:
   m_SynchronizeRotation: 1
   m_SynchronizeScale: 0
   m_UseLocal: 0
+--- !u!114 &-3750413493331558845
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1869079261902575393}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 64179f3720bbfe947b7724caa67b7c1d, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_SynchronizeVelocity: 1
+  m_SynchronizeAngularVelocity: 0
+  m_TeleportEnabled: 0
+  m_TeleportIfDistanceGreaterThan: 3
 --- !u!1001 &4041198714810762828
 PrefabInstance:
   m_ObjectHideFlags: 0

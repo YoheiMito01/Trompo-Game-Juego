@@ -14,6 +14,7 @@ GameObject:
   - component: {fileID: 1809888109282508092}
   - component: {fileID: -7139992420887508117}
   - component: {fileID: -2986915118430853401}
+  - component: {fileID: -435223712645892512}
   m_Layer: 0
   m_Name: Trompo ATK
   m_TagString: Untagged
@@ -103,7 +104,7 @@ MonoBehaviour:
   maxSpeed: 100
   spinSpeed: 1000
   currentSpin: 0
-  spinDecay: 5
+  spinDecay: 7
   visualPivot: {fileID: 6610626350108337789}
   visualModel: {fileID: 1107830398529089853}
   maxTiltAngle: 25
@@ -126,9 +127,10 @@ MonoBehaviour:
   prefixField: -1
   Synchronization: 3
   OwnershipTransfer: 0
-  observableSearch: 2
+  observableSearch: 0
   ObservedComponents:
-  - {fileID: -2986915118430853401}
+  - {fileID: 1809888109282508092}
+  - {fileID: 0}
   sceneViewId: 0
   InstantiationId: 0
   isRuntimeInstantiated: 0
@@ -148,6 +150,22 @@ MonoBehaviour:
   m_SynchronizeRotation: 1
   m_SynchronizeScale: 0
   m_UseLocal: 0
+--- !u!114 &-435223712645892512
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1236741904013606002}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 64179f3720bbfe947b7724caa67b7c1d, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_SynchronizeVelocity: 1
+  m_SynchronizeAngularVelocity: 0
+  m_TeleportEnabled: 0
+  m_TeleportIfDistanceGreaterThan: 3
 --- !u!1001 &636543143240128214
 PrefabInstance:
   m_ObjectHideFlags: 0
