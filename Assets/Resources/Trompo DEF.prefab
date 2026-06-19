@@ -102,13 +102,13 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   acceleration: 60
   maxSpeed: 50
-  spinSpeed: 1500
+  spinSpeed: 1000
   currentSpin: 0
-  spinDecay: 10
+  spinDecay: 7
   visualPivot: {fileID: 7004784238063486989}
   visualModel: {fileID: 4584525523999449511}
-  maxTiltAngle: 25
-  wobbleSpeed: 8
+  maxTiltAngle: 20
+  wobbleSpeed: 5
   fallTorque: 25
 --- !u!114 &7169736459106576727
 MonoBehaviour:

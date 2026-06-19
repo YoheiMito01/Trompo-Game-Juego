@@ -51,7 +51,7 @@ PrefabInstance:
     - target: {fileID: -428042446677320216, guid: 63e0ef7dcde451b458d8d359ecf67ccf, type: 3}
       propertyPath: m_Materials.Array.data[0]
       value: 
-      objectReference: {fileID: 2100000, guid: f9ef5b9d9aa374b409974a533e743210, type: 2}
+      objectReference: {fileID: 2100000, guid: d9d66429d76d45e4588709a0f48707ed, type: 2}
     - target: {fileID: 919132149155446097, guid: 63e0ef7dcde451b458d8d359ecf67ccf, type: 3}
       propertyPath: m_Name
       value: estadio final

@@ -350,8 +350,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   powerUpPrefab: {fileID: 1617150873559080160, guid: 36c38e1862a643648b57faf133671c29, type: 3}
-  spawnTime: 7
-  arenaSize: {x: 40, y: 25}
+  spawnTime: 6
+  arenaSize: {x: 50.6, y: 57.4}
 --- !u!4 &934603483
 Transform:
   m_ObjectHideFlags: 0
@@ -361,7 +361,7 @@ Transform:
   m_GameObject: {fileID: 934603481}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 11.5, y: 0.8, z: 12.2}
+  m_LocalPosition: {x: 16.1, y: 1.9, z: 12.2}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
