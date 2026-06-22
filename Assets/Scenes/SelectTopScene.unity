@@ -2098,7 +2098,7 @@ MonoBehaviour:
   spawnPoint: {fileID: 1830551056}
   nameText: {fileID: 1884305128}
   descriptionText: {fileID: 1913786646}
-  botonSeleccionar: {fileID: 0}
+  botonSeleccionar: {fileID: 890193667}
 --- !u!4 &1830551056
 Transform:
   m_ObjectHideFlags: 0

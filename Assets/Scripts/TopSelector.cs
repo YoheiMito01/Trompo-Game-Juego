@@ -119,22 +119,17 @@ public class TopSelector : MonoBehaviourPunCallbacks
     // Comprueba si todos los jugadores ya hicieron su seleccion
     void ComprobarInicio()
     {
-        // Solo el Host tiene permiso para iniciar la partida
         if (!PhotonNetwork.IsMasterClient)
             return;
 
-        // Recorre todos los jugadores conectados
         foreach (Player player in PhotonNetwork.PlayerList)
         {
-            // Si algun jugador aun no tiene un trompo seleccionado,
-            // la partida no puede comenzar
             if (!player.CustomProperties.ContainsKey("TopIndex"))
                 return;
         }
 
-        // Si todos seleccionaron un trompo,
-        // carga la escena del juego para todos los jugadores
-        PhotonNetwork.LoadLevel("GameBase");
+        // En lugar de cargar "GameBase", cargamos la escena de mapas
+        PhotonNetwork.LoadLevel("SelectMapScene");
     }
 
     // Se ejecuta automaticamente cuando un jugador cambia una propiedad

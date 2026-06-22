@@ -1071,7 +1071,19 @@ MonoBehaviour:
   m_TargetGraphic: {fileID: 1143524910}
   m_OnClick:
     m_PersistentCalls:
-      m_Calls: []
+      m_Calls:
+      - m_Target: {fileID: 1148640082}
+        m_TargetAssemblyTypeName: MapSelector, Assembly-CSharp
+        m_MethodName: ConfirmarSeleccion
+        m_Mode: 1
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
 --- !u!114 &1143524910
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1120,6 +1132,7 @@ GameObject:
   m_Component:
   - component: {fileID: 1148640083}
   - component: {fileID: 1148640082}
+  - component: {fileID: 1148640084}
   m_Layer: 0
   m_Name: MapSpawn
   m_TagString: Untagged
@@ -1141,7 +1154,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   mapPrefabs:
   - {fileID: 3752620306865335419, guid: 1be07fdcf20f5de4e95e1a8ff4e1cdd0, type: 3}
-  - {fileID: 6374974736455569568, guid: b1d50f621435ee746837565c5c227400, type: 3}
+  - {fileID: 919132149155446097, guid: d69e191c07b136f42b6108f26344b3f1, type: 3}
   mapNames:
   - Arena Basica
   - Arena Laser
@@ -1150,6 +1163,9 @@ MonoBehaviour:
     duelos rapidos, aunque debes mirar arriba de vez en cuando
   - Una arena mas peligrosa, poderosos lasers apareceran y debes esquivarlos si no
     quieres ser destruido al instante
+  sceneNames:
+  - GameBase
+  - EstadioLaser
   spawnPoint: {fileID: 1148640083}
   mapNameText: {fileID: 1035366215}
   descriptionText: {fileID: 1652077278}
@@ -1170,6 +1186,28 @@ Transform:
   m_Children: []
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: -90, y: 0, z: 0}
+--- !u!114 &1148640084
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1148640081}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: aa584fbee541324448dd18d8409c7a41, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  ObservedComponentsFoldoutOpen: 1
+  Group: 0
+  prefixField: -1
+  Synchronization: 3
+  OwnershipTransfer: 0
+  observableSearch: 2
+  ObservedComponents: []
+  sceneViewId: 1
+  InstantiationId: 0
+  isRuntimeInstantiated: 0
 --- !u!1 &1262603993
 GameObject:
   m_ObjectHideFlags: 0

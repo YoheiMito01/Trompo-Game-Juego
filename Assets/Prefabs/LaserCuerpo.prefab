@@ -12,6 +12,7 @@ GameObject:
   - component: {fileID: 582479233269623209}
   - component: {fileID: 1701090486861602566}
   - component: {fileID: 6563656246226530046}
+  - component: {fileID: 6428410029320409810}
   m_Layer: 0
   m_Name: LaserCuerpo
   m_TagString: Untagged
@@ -107,3 +108,16 @@ CapsuleCollider:
   m_Height: 2
   m_Direction: 1
   m_Center: {x: 0.000000059604645, y: 0, z: -0.00000008940697}
+--- !u!114 &6428410029320409810
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3642349496775437238}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: dd6dcf2e2ea6f134795c4d96f7897b89, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  danoPorSegundo: 250

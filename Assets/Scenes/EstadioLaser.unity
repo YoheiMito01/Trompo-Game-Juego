@@ -208,13 +208,13 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 268351992}
   serializedVersion: 2
-  m_LocalRotation: {x: 0.2926809, y: -0.044643972, z: 0.013681141, w: 0.9550695}
-  m_LocalPosition: {x: 3.76, y: 18.69, z: -34.15}
+  m_LocalRotation: {x: 0.3299314, y: -0.04407276, z: 0.015422385, w: 0.9428495}
+  m_LocalPosition: {x: 4, y: 22.5, z: -36.5}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 0}
-  m_LocalEulerAnglesHint: {x: 34.075, y: -5.353, z: 0}
+  m_LocalEulerAnglesHint: {x: 38.573, y: -5.353, z: 0}
 --- !u!114 &268351996
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -288,8 +288,8 @@ Light:
   serializedVersion: 10
   m_Type: 1
   m_Shape: 0
-  m_Color: {r: 1, g: 0.95686275, b: 0.8392157, a: 1}
-  m_Intensity: 1
+  m_Color: {r: 1, g: 0.7783019, b: 0.933625, a: 1}
+  m_Intensity: 1.2
   m_Range: 10
   m_SpotAngle: 30
   m_InnerSpotAngle: 21.80208
@@ -331,7 +331,7 @@ Light:
   m_Lightmapping: 4
   m_LightShadowCasterMode: 0
   m_AreaSize: {x: 1, y: 1}
-  m_BounceIntensity: 1
+  m_BounceIntensity: 1.52
   m_ColorTemperature: 6570
   m_UseColorTemperature: 0
   m_BoundingSphereOverride: {x: 0, y: 0, z: 0, w: 0}
@@ -347,13 +347,13 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 496128708}
   serializedVersion: 2
-  m_LocalRotation: {x: 0.40821788, y: -0.23456968, z: 0.10938163, w: 0.8754261}
-  m_LocalPosition: {x: -0.03, y: 3.04, z: 0.04}
+  m_LocalRotation: {x: 0.6756118, y: -0.18497449, z: 0.18102962, w: 0.6903343}
+  m_LocalPosition: {x: 0.2, y: 24.67, z: -0.36}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 0}
-  m_LocalEulerAnglesHint: {x: 50, y: -30, z: 0}
+  m_LocalEulerAnglesHint: {x: 88.765, y: -30, z: 0}
 --- !u!114 &496128711
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -377,6 +377,82 @@ MonoBehaviour:
   m_LightCookieSize: {x: 1, y: 1}
   m_LightCookieOffset: {x: 0, y: 0}
   m_SoftShadowQuality: 0
+--- !u!1 &918107387
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 918107390}
+  - component: {fileID: 918107389}
+  - component: {fileID: 918107388}
+  m_Layer: 0
+  m_Name: NetworkLaserManager
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!114 &918107388
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 918107387}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 74c198ddd05261043875016c4be21bfb, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  prefabAviso: {fileID: 3642349496775437238, guid: 6909e59f6bf8d2340a01d25c468987fa, type: 3}
+  prefabLaserReal: {fileID: 3642349496775437238, guid: ff2eb7763951afc47a96ed662b37c3fc, type: 3}
+  radioArena: 18.8
+  alturaY: 0.33
+  distanciaMinima: 8
+  tiempoDeAviso: 3
+  duracionDelLaser: 5
+  velocidadDeGiro: 1000
+  tiempoEntreAtaques: 4
+--- !u!114 &918107389
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 918107387}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: aa584fbee541324448dd18d8409c7a41, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  ObservedComponentsFoldoutOpen: 1
+  Group: 0
+  prefixField: -1
+  Synchronization: 3
+  OwnershipTransfer: 0
+  observableSearch: 2
+  ObservedComponents: []
+  sceneViewId: 1
+  InstantiationId: 0
+  isRuntimeInstantiated: 0
+--- !u!4 &918107390
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 918107387}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0.97, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 0}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &1549292691 stripped
 GameObject:
   m_CorrespondingSourceObject: {fileID: 919132149155446097, guid: d69e191c07b136f42b6108f26344b3f1, type: 3}
@@ -420,7 +496,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!114 &1750795446
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -435,8 +511,9 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   prefabAviso: {fileID: 3642349496775437238, guid: 6909e59f6bf8d2340a01d25c468987fa, type: 3}
   prefabLaserReal: {fileID: 3642349496775437238, guid: ff2eb7763951afc47a96ed662b37c3fc, type: 3}
-  radioArena: 18.2
+  radioArena: 18.8
   alturaY: 0.33
+  distanciaMinima: 8
   tiempoDeAviso: 3
   duracionDelLaser: 5
   velocidadDeGiro: 1000
@@ -464,6 +541,18 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 0}
     m_Modifications:
+    - target: {fileID: -8679921383154817045, guid: d69e191c07b136f42b6108f26344b3f1, type: 3}
+      propertyPath: m_LocalScale.x
+      value: 20
+      objectReference: {fileID: 0}
+    - target: {fileID: -8679921383154817045, guid: d69e191c07b136f42b6108f26344b3f1, type: 3}
+      propertyPath: m_LocalScale.y
+      value: 20
+      objectReference: {fileID: 0}
+    - target: {fileID: -8679921383154817045, guid: d69e191c07b136f42b6108f26344b3f1, type: 3}
+      propertyPath: m_LocalScale.z
+      value: 20
+      objectReference: {fileID: 0}
     - target: {fileID: -8679921383154817045, guid: d69e191c07b136f42b6108f26344b3f1, type: 3}
       propertyPath: m_LocalPosition.x
       value: 0.6
@@ -524,3 +613,4 @@ SceneRoots:
   - {fileID: 496128710}
   - {fileID: 2060382765}
   - {fileID: 1750795447}
+  - {fileID: 918107390}

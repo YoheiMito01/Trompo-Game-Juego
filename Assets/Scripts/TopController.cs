@@ -206,4 +206,22 @@ public class TopController : MonoBehaviourPun, IPunObservable
             }
         }
     }
+
+    public void TakeLaserDamage(float amount)
+    {
+        // Regla de oro en multijugador: Solo el dueño de este objeto puede aplicarse daño.
+        // Si no hiciéramos esto, todos los clientes verían la colisión y restarían daño,
+        // lo que multiplicaría la pérdida por el número de jugadores en la sala.
+        if (!photonView.IsMine || hasFallen) return;
+
+        currentSpin -= amount;
+
+        // Evitamos que baje de cero de inmediato
+        currentSpin = Mathf.Max(currentSpin, 0);
+
+        if (currentSpin <= 0)
+        {
+            FallOver();
+        }
+    }
 }

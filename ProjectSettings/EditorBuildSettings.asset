@@ -20,4 +20,7 @@ EditorBuildSettings:
   - enabled: 1
     path: Assets/Scenes/GameBase.unity
     guid: 9fc0d4010bbf28b4594072e72b8655ab
+  - enabled: 1
+    path: Assets/Scenes/EstadioLaser.unity
+    guid: 6eb198a242bde774f95dedfe8fe09459
   m_configObjects: {}
