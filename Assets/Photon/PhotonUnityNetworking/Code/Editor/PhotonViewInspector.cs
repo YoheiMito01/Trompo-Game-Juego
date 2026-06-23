@@ -1,12 +1,4 @@
-// ----------------------------------------------------------------------------
-// <copyright file="PhotonViewInspector.cs" company="Exit Games GmbH">
-//   PhotonNetwork Framework for Unity - Copyright (C) 2018 Exit Games GmbH
-// </copyright>
-// <summary>
-//   Custom inspector for the PhotonView component.
-// </summary>
-// <author>developer@exitgames.com</author>
-// ----------------------------------------------------------------------------
+
 
 using System;
 using UnityEditor;
