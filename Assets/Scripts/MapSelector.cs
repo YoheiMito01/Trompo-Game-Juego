@@ -11,7 +11,7 @@ public class MapSelector : MonoBehaviourPun
     [TextArea]
     public string[] descriptions;
 
-    // NUEVO: Aquí pondrás el nombre EXACTO de la escena que corresponde a cada mapa
+    // Aquí pondrás el nombre EXACTO de la escena que corresponde a cada mapa
     public string[] sceneNames;
 
     [Header("Referencias UI")]
@@ -20,6 +20,10 @@ public class MapSelector : MonoBehaviourPun
     public TMP_Text descriptionText;
     public GameObject selectButton;
     public TMP_Text waitingText;
+
+    // NUEVO: Referencias para los botones de Siguiente y Anterior
+    public GameObject nextButton;
+    public GameObject previousButton;
 
     private int currentIndex;
     private GameObject currentMap;
@@ -31,12 +35,20 @@ public class MapSelector : MonoBehaviourPun
         // Control de Interfaz
         if (PhotonNetwork.IsMasterClient)
         {
+            // El Host ve todos los botones y no ve el texto de espera
             selectButton.SetActive(true);
+            nextButton.SetActive(true);
+            previousButton.SetActive(true);
+
             waitingText.gameObject.SetActive(false);
         }
         else
         {
+            // Los clientes no ven ningún botón de control, solo el texto de espera
             selectButton.SetActive(false);
+            nextButton.SetActive(false);
+            previousButton.SetActive(false);
+
             waitingText.gameObject.SetActive(true);
         }
     }

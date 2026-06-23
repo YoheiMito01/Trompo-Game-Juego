@@ -1171,6 +1171,8 @@ MonoBehaviour:
   descriptionText: {fileID: 1652077278}
   selectButton: {fileID: 1143524907}
   waitingText: {fileID: 1518076055}
+  nextButton: {fileID: 951468629}
+  previousButton: {fileID: 600783739}
 --- !u!4 &1148640083
 Transform:
   m_ObjectHideFlags: 0

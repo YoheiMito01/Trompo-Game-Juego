@@ -11,7 +11,7 @@ public class TopController : MonoBehaviourPun, IPunObservable
 
     [Header("Spin")]
     [SerializeField] private float spinSpeed = 1000f;
-    [SerializeField] private float currentSpin;
+    [SerializeField] public float currentSpin;
     [SerializeField] private float spinDecay = 5f;
 
     [Header("Visual References")]
@@ -33,10 +33,10 @@ public class TopController : MonoBehaviourPun, IPunObservable
     {
         rb = GetComponent<Rigidbody>();
         currentSpin = spinSpeed;
-
-        // NOTA: Quitamos el rb.isKinematic = true. 
-        // Permitiremos que la física reaccione en ambos lados, 
-        // y Photon Rigidbody View se encargará de corregir las posiciones.
+        if (photonView.IsMine)
+        {
+            MatchManager.Instance.RegistrarTrompo();
+        }
     }
 
     void Update()
@@ -124,6 +124,14 @@ public class TopController : MonoBehaviourPun, IPunObservable
         {
             FallOver();
         }
+        if (photonView.IsMine && currentSpin <= 0)
+        {
+            // Asegúrate de que el giro no baje de 0
+            currentSpin = 0;
+
+            // Le avisamos al juez que nuestro jugador (usando su ActorNumber único) perdió
+            MatchManager.Instance.ReportarDerrota(PhotonNetwork.LocalPlayer.ActorNumber);
+        }
     }
 
     void HandleVisualSpin()
@@ -206,8 +214,6 @@ public class TopController : MonoBehaviourPun, IPunObservable
             }
         }
     }
-
-    // Esta función debe estar dentro de tu TopController.cs
     public void TakeLaserDamage(float amount)
     {
         // Solo el dueño del trompo puede restarse energía, sino se restaría doble en el online

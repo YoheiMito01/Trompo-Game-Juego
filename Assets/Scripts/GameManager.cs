@@ -53,20 +53,42 @@ public class GameManager : MonoBehaviourPunCallbacks
     // Se ejecuta automaticamente al iniciar la escena
     private void Start()
     {
-        // Oculta todos los elementos que aun no deben verse
-        btnJoinRoom.SetActive(false);
-        btnCreateRoom.SetActive(false);
-        panelLobby.SetActive(false);
-
-        // Muestra el menu principal
-        panelStart.SetActive(true);
-
-        // Oculta el lobby hasta crear o unirse a una sala
-        panelCreateRoom.SetActive(false);
-
         // Hace que cuando el Host cambie de escena,
         // todos los jugadores cambien automaticamente
         PhotonNetwork.AutomaticallySyncScene = true;
+
+        // NUEVO: Verificamos si regresamos de una partida y ya estamos en una sala
+        if (PhotonNetwork.InRoom)
+        {
+            // Apagamos el menú de inicio
+            panelStart.SetActive(false);
+            btnJoinRoom.SetActive(false);
+            btnCreateRoom.SetActive(false);
+            panelLobby.SetActive(false);
+
+            // Encendemos directamente el panel de la sala
+            panelCreateRoom.SetActive(true);
+
+            // Configuramos los textos y botones
+            salaName.text = PhotonNetwork.CurrentRoom.Name;
+            btnStart.SetActive(PhotonNetwork.IsMasterClient);
+
+            // Cargamos a los jugadores que siguen en la sala
+            ActualizarListaJugadores();
+        }
+        else
+        {
+            // Flujo normal al abrir el juego por primera vez
+            btnJoinRoom.SetActive(false);
+            btnCreateRoom.SetActive(false);
+            panelLobby.SetActive(false);
+
+            // Muestra el menu principal
+            panelStart.SetActive(true);
+
+            // Oculta el lobby hasta crear o unirse a una sala
+            panelCreateRoom.SetActive(false);
+        }
     }
 
     // Conecta al jugador con Photon
