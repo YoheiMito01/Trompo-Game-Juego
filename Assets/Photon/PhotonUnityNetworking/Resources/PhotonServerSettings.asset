@@ -42,6 +42,7 @@ MonoBehaviour:
   - RequestDestroy
   - RPC_SpawnLasers
   - RPC_SincronizarMapa
+  - RPC_LanzarCubo
   DisableAutoOpenWizard: 1
   ShowSettings: 1
   DevRegionSetOnce: 0

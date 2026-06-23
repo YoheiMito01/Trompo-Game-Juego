@@ -2,17 +2,20 @@ using System.Collections;      // Libreria para utilizar corrutinas
 using UnityEngine;             // Libreria principal de Unity
 using Photon.Pun;              // Libreria para utilizar Photon PUN
 
-// Clase encargada de generar automaticamente los boosts en la arena
+// Clase encargada de generar automaticamente los boosts en la arena (Área Circular)
 public class PowerUpSpawner : MonoBehaviourPun
 {
-    // Prefab del boost que sera generado
+    // Prefab del boost que sera generado (Debe estar en la carpeta Resources)
     [SerializeField] private GameObject powerUpPrefab;
 
     // Tiempo de espera entre cada intento de aparicion
     [SerializeField] private float spawnTime = 10f;
 
-    // Tamaño del area donde pueden aparecer los boosts
-    [SerializeField] private Vector2 arenaSize = new Vector2(20, 20);
+    // CAMBIO: Ahora usamos un Radio para definir el tamaño del círculo de la arena
+    [SerializeField] private float arenaRadius = 10f;
+
+    // Ajusta la altura exacta (Y) en la que quieres que flote el boost sobre el suelo
+    [SerializeField] private float spawnHeightY = 0.5f;
 
     // Referencia al boost que actualmente existe en la escena
     private GameObject currentPowerUp;
@@ -29,55 +32,57 @@ public class PowerUpSpawner : MonoBehaviourPun
         StartCoroutine(SpawnRoutine());
     }
 
-    // Dibuja un cuadro verde en el editor de Unity
-    // para visualizar el area de aparicion de los boosts
+    // CAMBIO: Dibuja un círculo verde en el editor de Unity para visualizar el área redonda
     private void OnDrawGizmos()
     {
-        // Define el color del dibujo
         Gizmos.color = Color.green;
 
-        // Dibuja un cubo transparente que representa el area de spawn
-        Gizmos.DrawWireCube(
-            transform.position,
-            new Vector3(arenaSize.x, 0.1f, arenaSize.y)
-        );
+        Vector3 centro = transform.position;
+        float pasos = 50f; // Qué tan definido se verá el círculo en el editor
+        float perimetro = 2f * Mathf.PI;
+        Vector3 puntoAnterior = centro + new Vector3(arenaRadius, 0f, 0f);
+
+        for (int i = 1; i <= pasos; i++)
+        {
+            float angulo = (i / pasos) * perimetro;
+            Vector3 puntoSiguiente = centro + new Vector3(Mathf.Cos(angulo) * arenaRadius, 0f, Mathf.Sin(angulo) * arenaRadius);
+
+            // Forzamos la altura visual en los gizmos para que coincida con el suelo/spawn
+            puntoAnterior.y = spawnHeightY;
+            puntoSiguiente.y = spawnHeightY;
+
+            Gizmos.DrawLine(puntoAnterior, puntoSiguiente);
+            puntoAnterior = puntoSiguiente;
+        }
     }
 
     // Corrutina que controla la aparicion de los boosts
     IEnumerator SpawnRoutine()
     {
-        // Se ejecuta continuamente mientras exista el objeto
         while (true)
         {
-            // Espera el tiempo configurado antes de continuar
             yield return new WaitForSeconds(spawnTime);
 
-            // Si ya existe un boost en la escena espera al siguiente ciclo
             if (currentPowerUp != null)
                 continue;
 
-            // Si no existe ninguno crea uno nuevo
             SpawnPowerUp();
         }
     }
 
-    // Genera un nuevo boost en una posicion aleatoria
+    // CAMBIO: Genera un nuevo boost en una posicion aleatoria CIRCULAR
     void SpawnPowerUp()
     {
-        // Comienza utilizando la posicion del objeto spawner
-        Vector3 pos = transform.position;
+        // Genera un punto aleatorio bidimensional dentro de un círculo de radio 1
+        Vector2 puntoEnCirculo = Random.insideUnitCircle * arenaRadius;
 
-        // Genera una posicion aleatoria dentro del ancho permitido
-        pos.x += Random.Range(-arenaSize.x / 2f, arenaSize.x / 2f);
+        // Convertimos ese punto 2D (X, Y) a coordenadas 3D del mundo (X, Z) usando la posición del spawner como centro
+        Vector3 pos = transform.position + new Vector3(puntoEnCirculo.x, 0f, puntoEnCirculo.y);
 
-        // Genera una posicion aleatoria dentro del largo permitido
-        pos.z += Random.Range(-arenaSize.y / 2f, arenaSize.y / 2f);
+        // Ajusta la altura configurada
+        pos.y = spawnHeightY;
 
-        // Ajusta la altura para que el boost quede sobre el suelo
-        pos.y = 0.5f;
-
-        // Crea el boost utilizando Photon para que aparezca
-        // sincronizado en todos los jugadores conectados
+        // Crea el boost utilizando Photon para que aparezca sincronizado
         currentPowerUp = PhotonNetwork.Instantiate(
             powerUpPrefab.name,
             pos,
@@ -85,12 +90,8 @@ public class PowerUpSpawner : MonoBehaviourPun
         );
     }
 
-    // Se llama cuando un jugador recoge el boost
-    // o cuando este desaparece por tiempo
     public void PowerUpCollected()
     {
-        // Elimina la referencia al boost actual
-        // permitiendo que pueda generarse uno nuevo
         currentPowerUp = null;
     }
 }

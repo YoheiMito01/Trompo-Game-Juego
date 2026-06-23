@@ -351,7 +351,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   powerUpPrefab: {fileID: 1617150873559080160, guid: 36c38e1862a643648b57faf133671c29, type: 3}
   spawnTime: 6
-  arenaSize: {x: 50.6, y: 57.4}
+  arenaRadius: 35.38
+  spawnHeightY: 1.13
 --- !u!4 &934603483
 Transform:
   m_ObjectHideFlags: 0
@@ -504,6 +505,82 @@ MonoBehaviour:
     m_MipBias: 0
     m_VarianceClampScale: 0.9
     m_ContrastAdaptiveSharpening: 0
+--- !u!1 &995276453
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 995276455}
+  - component: {fileID: 995276454}
+  - component: {fileID: 995276456}
+  m_Layer: 0
+  m_Name: NetworkStadiumManage
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!114 &995276454
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 995276453}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: ee41fd68983ee924b86c065f5d0a56b9, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  prefabAviso: {fileID: 8473963246753525906, guid: 1768fd9eace90ca47813a4f8a787faee, type: 3}
+  prefabCubo: {fileID: 532850435229599287, guid: e50a673fe676f3a48bfcd72bec8e6427, type: 3}
+  radioEstadio: 34.1
+  alturaSuelo: 1.01
+  tiempoDeAviso: 2
+  alturaDeCaida: 15
+  velocidadCaida: 0.2
+  tiempoEnArena: 5
+  tiempoEntreCubos: 4
+--- !u!4 &995276455
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 995276453}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 17, y: 0, z: 11.6}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 0}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &995276456
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 995276453}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: aa584fbee541324448dd18d8409c7a41, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  ObservedComponentsFoldoutOpen: 1
+  Group: 0
+  prefixField: -1
+  Synchronization: 3
+  OwnershipTransfer: 0
+  observableSearch: 2
+  ObservedComponents: []
+  sceneViewId: 1
+  InstantiationId: 0
+  isRuntimeInstantiated: 0
 --- !u!1 &1129393869
 GameObject:
   m_ObjectHideFlags: 0
@@ -737,3 +814,4 @@ SceneRoots:
   - {fileID: 9641975}
   - {fileID: 1129393870}
   - {fileID: 86594164}
+  - {fileID: 995276455}

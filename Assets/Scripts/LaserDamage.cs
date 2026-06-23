@@ -2,18 +2,20 @@ using UnityEngine;
 
 public class LaserDamage : MonoBehaviour
 {
-    [Tooltip("Pérdida de giro por segundo mientras se toca el láser")]
-    public float danoPorSegundo = 250f;
+    [Header("Configuración de Daño")]
+    [Tooltip("Cantidad de spin que quita por segundo mientras lo toca")]
+    public float damagePerSecond = 300f;
 
+    // OnTriggerStay se ejecuta TODOS los frames que un objeto esté tocando el láser
     private void OnTriggerStay(Collider other)
     {
-        // Si el collider pertenece a un trompo
-        TopController top = other.GetComponent<TopController>();
+        // Verificamos si lo que tocó el láser es un trompo
+        TopController trompo = other.GetComponent<TopController>();
 
-        if (top != null)
+        if (trompo != null)
         {
-            // Le indicamos al trompo que tome daño constante por el láser
-            top.TakeLaserDamage(danoPorSegundo * Time.fixedDeltaTime);
+            // Le quitamos spin basado en el tiempo para que sea suave y constante
+            trompo.TakeLaserDamage(damagePerSecond * Time.fixedDeltaTime);
         }
     }
 }

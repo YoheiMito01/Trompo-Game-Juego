@@ -28,6 +28,32 @@ public class NetworkLaserManager : MonoBehaviourPun
         }
     }
 
+    // --- NUEVA FUNCIÓN PARA VER EL ÁREA EN EL EDITOR ---
+    private void OnDrawGizmos()
+    {
+        // Le damos el color azul que pediste
+        Gizmos.color = Color.blue;
+
+        Vector3 centro = transform.position;
+        float pasos = 50f; // Qué tan definido se verá el círculo
+        float perimetro = 2f * Mathf.PI;
+
+        // Calculamos el primer punto del círculo
+        Vector3 puntoAnterior = centro + new Vector3(radioArena, 0f, 0f);
+        puntoAnterior.y = alturaY; // Ajustamos a la altura de los láseres
+
+        for (int i = 1; i <= pasos; i++)
+        {
+            float angulo = (i / pasos) * perimetro;
+            Vector3 puntoSiguiente = centro + new Vector3(Mathf.Cos(angulo) * radioArena, 0f, Mathf.Sin(angulo) * radioArena);
+            puntoSiguiente.y = alturaY; // Ajustamos a la altura de los láseres
+
+            // Dibujamos la línea entre los puntos
+            Gizmos.DrawLine(puntoAnterior, puntoSiguiente);
+            puntoAnterior = puntoSiguiente;
+        }
+    }
+
     IEnumerator MasterClientLoop()
     {
         // Esperar un poco al inicio de la partida

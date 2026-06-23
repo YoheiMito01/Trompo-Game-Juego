@@ -207,18 +207,18 @@ public class TopController : MonoBehaviourPun, IPunObservable
         }
     }
 
+    // Esta función debe estar dentro de tu TopController.cs
     public void TakeLaserDamage(float amount)
     {
-        // Regla de oro en multijugador: Solo el dueño de este objeto puede aplicarse daño.
-        // Si no hiciéramos esto, todos los clientes verían la colisión y restarían daño,
-        // lo que multiplicaría la pérdida por el número de jugadores en la sala.
+        // Solo el dueño del trompo puede restarse energía, sino se restaría doble en el online
         if (!photonView.IsMine || hasFallen) return;
 
         currentSpin -= amount;
 
-        // Evitamos que baje de cero de inmediato
+        // Evitamos que baje de cero
         currentSpin = Mathf.Max(currentSpin, 0);
 
+        // Si llega a 0, el trompo cae
         if (currentSpin <= 0)
         {
             FallOver();
