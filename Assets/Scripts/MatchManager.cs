@@ -26,6 +26,10 @@ public class MatchManager : MonoBehaviourPunCallbacks
     private void Awake()
     {
         Instance = this;
+
+        // SOLUCIÓN BUG 1: Le recordamos a Photon en cada partida que los clientes 
+        // DEBEN obedecer y seguir al Host cuando este cambie o reinicie la escena.
+        PhotonNetwork.AutomaticallySyncScene = true;
     }
 
     private void Start()
@@ -43,7 +47,11 @@ public class MatchManager : MonoBehaviourPunCallbacks
     // El TopController llamará a esto al nacer
     public void RegistrarTrompo()
     {
-        photonView.RPC("RPC_SumarJugador", RpcTarget.All);
+        // SOLUCIÓN BUG 2: Cambiamos RpcTarget.All por RpcTarget.AllBuffered
+        // "Buffered" significa que si un jugador tiene lag y tarda en cargar la pantalla, 
+        // cuando por fin entre a la partida, leerá todos los RPCs acumulados y 
+        // sumará correctamente a los jugadores vivos.
+        photonView.RPC("RPC_SumarJugador", RpcTarget.AllBuffered);
     }
 
     [PunRPC]
@@ -56,6 +64,8 @@ public class MatchManager : MonoBehaviourPunCallbacks
     public void ReportarDerrota(int idJugadorPerdedor)
     {
         if (partidaTerminada) return;
+
+        // Aquí no usamos Buffered porque los jugadores ya están jugando y sincronizados.
         photonView.RPC("RPC_ProcesarEliminacion", RpcTarget.All, idJugadorPerdedor);
     }
 
@@ -96,7 +106,7 @@ public class MatchManager : MonoBehaviourPunCallbacks
     {
         if (PhotonNetwork.IsMasterClient)
         {
-            // PhotonNetwork.LoadLevel recarga la escena actual para todos sincronizadamente
+            // Gracias al AutomaticallySyncScene del Awake, esto jalará a todos los clientes.
             PhotonNetwork.LoadLevel(SceneManager.GetActiveScene().name);
         }
     }

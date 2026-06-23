@@ -104,7 +104,7 @@ MonoBehaviour:
   maxSpeed: 50
   spinSpeed: 1000
   currentSpin: 0
-  spinDecay: 30
+  spinDecay: 20
   visualPivot: {fileID: 7004784238063486989}
   visualModel: {fileID: 4584525523999449511}
   maxTiltAngle: 20
@@ -127,9 +127,11 @@ MonoBehaviour:
   prefixField: -1
   Synchronization: 3
   OwnershipTransfer: 0
-  observableSearch: 0
+  observableSearch: 1
   ObservedComponents:
   - {fileID: 2864909698926378269}
+  - {fileID: 4107493136877120860}
+  - {fileID: -3750413493331558845}
   sceneViewId: 0
   InstantiationId: 0
   isRuntimeInstantiated: 0
