@@ -4,6 +4,7 @@ Sobre el Juego
 Es un juego 3D multijugador en línea desarrollado con Unity y Photon PUN. Cada jugador controla su propio trompo en una arena de combate. El objetivo es ser el último trompo girando.
 
 La mecánica principal se basa en la "estamina" (velocidad de giro). Los trompos pierden energía de forma natural con el tiempo, pero también pueden perderla al colisionar con otros jugadores o al recibir daño de obstaculos. Los jugadores pueden recoger potenciadores (Spin Boosts) en la arena para recuperar energía y mantenerse en el combate. Cuando la estamina de un trompo llega a cero, este cae y el jugador es derrotado.
+
 Controles 🎮
 
     Movimiento: Mantén presionado el Clic Izquierdo del ratón sobre tu trompo y arrastra en la dirección a la que quieras ir. El trompo recibirá un impulso hacia esa dirección.
