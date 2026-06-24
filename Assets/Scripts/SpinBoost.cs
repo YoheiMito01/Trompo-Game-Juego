@@ -1,123 +1,127 @@
-using UnityEngine;          // Libreria principal de Unity
-using Photon.Pun;           // Libreria para utilizar Photon PUN
+using UnityEngine;
+using Photon.Pun;
 
 // Clase encargada de controlar el funcionamiento del boost de energia
+[RequireComponent(typeof(AudioSource))] // <-- Asegura que Unity le ponga un AudioSource al objeto
 public class SpinBoost : MonoBehaviourPun
 {
-    // Cantidad de energia que recibe el trompo al recoger el boost
+    [Header("Configuración de Boost")]
     [SerializeField] private float spinBonus = 300f;
-
-    // Tiempo maximo que permanecera el boost en la arena
     [SerializeField] private float lifeTime = 3f;
 
-    // Referencia al objeto que genera los boosts
+    [Header("Efectos de Sonido")]
+    [SerializeField] private AudioClip spawnSound;
+    [SerializeField] private AudioClip collectSound;
+    [SerializeField] private AudioClip disappearSound;
+
+    private AudioSource audioSource;
     private PowerUpSpawner spawner;
-
-    // Variable que evita que el boost sea recogido o destruido varias veces
     private bool collected = false;
+    private Collider col;
+    private Renderer[] renderers;
 
-    // Se ejecuta automaticamente al crear el boost
+    void Awake()
+    {
+        // Obtenemos las referencias necesarias
+        audioSource = GetComponent<AudioSource>();
+        col = GetComponent<Collider>();
+        renderers = GetComponentsInChildren<Renderer>();
+    }
+
     void Start()
     {
-        // Busca el generador de boosts en la escena
         spawner = FindObjectOfType<PowerUpSpawner>();
 
-        // Solo el Host controla el tiempo de vida del boost
+        // 1. SONIDO DE APARICIÓN: Se reproduce para todos apenas el objeto se crea en su pantalla
+        if (spawnSound != null)
+        {
+            audioSource.PlayOneShot(spawnSound);
+        }
+
+        // Solo el Host programa el tiempo de vida
         if (PhotonNetwork.IsMasterClient)
         {
-            // Programa la destruccion automatica despues de unos segundos
-            Invoke(nameof(DestroyBoost), lifeTime);
+            Invoke(nameof(InitiateTimeout), lifeTime);
         }
     }
 
-    // Destruye el boost cuando nadie lo recoge antes del tiempo limite
-    void DestroyBoost()
+    // --- LÓGICA DE TIEMPO AGOTADO (NADIE LO TOMÓ) ---
+    void InitiateTimeout()
     {
-        // Si ya fue recogido no hace nada
-        if (collected)
-            return;
+        if (collected) return;
 
-        // Marca el boost como utilizado
-        collected = true;
-
-        // Informa al generador que ya no existe un boost activo
-        if (spawner != null)
-            spawner.PowerUpCollected();
-
-        // Destruye el boost para todos los jugadores conectados
-        PhotonNetwork.Destroy(gameObject);
+        // El Host le avisa a TODOS los jugadores que el tiempo se acabó
+        photonView.RPC(nameof(RpcTimeout), RpcTarget.All);
     }
 
-    // Se ejecuta cuando otro objeto entra en el collider del boost
+    [PunRPC]
+    void RpcTimeout()
+    {
+        if (collected) return;
+        collected = true;
+
+        // 2. SONIDO DE DESAPARICIÓN: Nadie lo agarró
+        if (disappearSound != null)
+        {
+            audioSource.PlayOneShot(disappearSound);
+        }
+
+        StartDestructionSequence(disappearSound);
+    }
+
+    // --- LÓGICA DE RECOLECCIÓN (ALGUIEN LO TOMÓ) ---
     private void OnTriggerEnter(Collider other)
     {
-        // Si el boost ya fue utilizado no hace nada
-        if (collected)
-            return;
+        if (collected) return;
 
-        // Busca el componente TopController del objeto que entro
-        TopController top =
-            other.GetComponent<TopController>();
+        TopController top = other.GetComponent<TopController>();
+        if (top == null) return;
 
-        // Si el objeto no es un trompo termina la funcion
-        if (top == null)
-            return;
+        PhotonView topView = top.GetComponent<PhotonView>();
+        if (topView == null || !topView.IsMine) return;
 
-        // Obtiene el PhotonView del trompo
-        PhotonView topView =
-            top.GetComponent<PhotonView>();
-
-        // Si no existe un PhotonView termina la funcion
-        if (topView == null)
-            return;
-
-        // Solo el dueño del trompo puede recoger el boost
-        if (!topView.IsMine)
-            return;
-
-        // Marca el boost como utilizado
-        collected = true;
-
-        // Agrega energia extra al trompo
+        // Le damos la energía al dueño localmente al instante
         top.AddSpin(spinBonus);
 
-        // Si este cliente es el Host destruye directamente el boost
+        // Avisamos a TODOS que este boost fue recogido
+        photonView.RPC(nameof(RpcCollected), RpcTarget.All);
+    }
+
+    [PunRPC]
+    void RpcCollected()
+    {
+        if (collected) return;
+        collected = true;
+
+        // 3. SONIDO DE RECOLECCIÓN: Alguien lo agarró
+        if (collectSound != null)
+        {
+            audioSource.PlayOneShot(collectSound);
+        }
+
+        StartDestructionSequence(collectSound);
+    }
+
+    // --- SECUENCIA DE DESTRUCCIÓN FANTASMA ---
+    void StartDestructionSequence(AudioClip clipPlayed)
+    {
+        // Apagamos colisiones y gráficos para que parezca que desapareció al instante
+        if (col != null) col.enabled = false;
+        foreach (Renderer r in renderers) r.enabled = false;
+
+        // Solo el Host se encarga de la destrucción real en red y de avisarle al Spawner
         if (PhotonNetwork.IsMasterClient)
         {
-            // Informa al generador que puede crear uno nuevo
-            if (spawner != null)
-                spawner.PowerUpCollected();
+            if (spawner != null) spawner.PowerUpCollected();
 
-            // Destruye el boost para todos los jugadores
-            PhotonNetwork.Destroy(gameObject);
-        }
-        else
-        {
-            // Si no es el Host envia una solicitud al Host
-            // para que este destruya el boost correctamente
-            photonView.RPC(
-                nameof(RequestDestroy),
-                RpcTarget.MasterClient
-            );
+            // Calculamos cuánto dura el sonido para esperar antes de destruir el objeto
+            float delay = (clipPlayed != null) ? clipPlayed.length : 0.1f;
+            Invoke(nameof(NetworkDestroy), delay);
         }
     }
 
-    // Funcion remota que solo ejecuta el Host
-    [PunRPC]
-    void RequestDestroy()
+    void NetworkDestroy()
     {
-        // Si ya fue destruido no hace nada
-        if (collected)
-            return;
-
-        // Marca el boost como utilizado
-        collected = true;
-
-        // Informa al generador que ya no existe un boost activo
-        if (spawner != null)
-            spawner.PowerUpCollected();
-
-        // Destruye el boost en todos los clientes
         PhotonNetwork.Destroy(gameObject);
     }
 }
