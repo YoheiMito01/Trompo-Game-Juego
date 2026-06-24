@@ -15,6 +15,7 @@ GameObject:
   - component: {fileID: -7139992420887508117}
   - component: {fileID: -2986915118430853401}
   - component: {fileID: -435223712645892512}
+  - component: {fileID: 3089934377939885785}
   m_Layer: 0
   m_Name: Trompo ATK
   m_TagString: Untagged
@@ -100,6 +101,15 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 288b0c71560575546b87171cbbc09c26, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  audioSource: {fileID: 3089934377939885785}
+  sonidosDeChoque:
+  - {fileID: 8300000, guid: c9fa3f41e6f51c846ac292c1be794b0a, type: 3}
+  - {fileID: 8300000, guid: 6543461cb7fe8fe4cb6e7ecfb56187ff, type: 3}
+  - {fileID: 8300000, guid: c928a41a9c9645d458a39eff298af802, type: 3}
+  - {fileID: 8300000, guid: dbf954e37df819649867ec03dc605ee1, type: 3}
+  - {fileID: 8300000, guid: edc1f8386efbddd4fb37c77277bc8fb8, type: 3}
+  - {fileID: 8300000, guid: 9d1190475beda1d4cbff201ef0e46bda, type: 3}
+  - {fileID: 8300000, guid: c4d4a8f708ac0244e96d31131628314f, type: 3}
   acceleration: 100
   maxSpeed: 100
   spinSpeed: 1000
@@ -167,6 +177,102 @@ MonoBehaviour:
   m_SynchronizeAngularVelocity: 1
   m_TeleportEnabled: 0
   m_TeleportIfDistanceGreaterThan: 3
+--- !u!82 &3089934377939885785
+AudioSource:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1236741904013606002}
+  m_Enabled: 1
+  serializedVersion: 4
+  OutputAudioMixerGroup: {fileID: 0}
+  m_audioClip: {fileID: 0}
+  m_PlayOnAwake: 0
+  m_Volume: 1
+  m_Pitch: 1
+  Loop: 0
+  Mute: 0
+  Spatialize: 0
+  SpatializePostEffects: 0
+  Priority: 128
+  DopplerLevel: 1
+  MinDistance: 1
+  MaxDistance: 500
+  Pan2D: 0
+  rolloffMode: 0
+  BypassEffects: 0
+  BypassListenerEffects: 0
+  BypassReverbZones: 0
+  rolloffCustomCurve:
+    serializedVersion: 2
+    m_Curve:
+    - serializedVersion: 3
+      time: 0
+      value: 1
+      inSlope: 0
+      outSlope: 0
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0.33333334
+      outWeight: 0.33333334
+    - serializedVersion: 3
+      time: 1
+      value: 0
+      inSlope: 0
+      outSlope: 0
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0.33333334
+      outWeight: 0.33333334
+    m_PreInfinity: 2
+    m_PostInfinity: 2
+    m_RotationOrder: 4
+  panLevelCustomCurve:
+    serializedVersion: 2
+    m_Curve:
+    - serializedVersion: 3
+      time: 0
+      value: 0
+      inSlope: 0
+      outSlope: 0
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0.33333334
+      outWeight: 0.33333334
+    m_PreInfinity: 2
+    m_PostInfinity: 2
+    m_RotationOrder: 4
+  spreadCustomCurve:
+    serializedVersion: 2
+    m_Curve:
+    - serializedVersion: 3
+      time: 0
+      value: 0
+      inSlope: 0
+      outSlope: 0
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0.33333334
+      outWeight: 0.33333334
+    m_PreInfinity: 2
+    m_PostInfinity: 2
+    m_RotationOrder: 4
+  reverbZoneMixCustomCurve:
+    serializedVersion: 2
+    m_Curve:
+    - serializedVersion: 3
+      time: 0
+      value: 1
+      inSlope: 0
+      outSlope: 0
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0.33333334
+      outWeight: 0.33333334
+    m_PreInfinity: 2
+    m_PostInfinity: 2
+    m_RotationOrder: 4
 --- !u!1001 &636543143240128214
 PrefabInstance:
   m_ObjectHideFlags: 0

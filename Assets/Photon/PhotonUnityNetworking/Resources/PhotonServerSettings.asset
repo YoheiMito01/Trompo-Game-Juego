@@ -45,6 +45,8 @@ MonoBehaviour:
   - RPC_LanzarCubo
   - RPC_ProcesarEliminacion
   - RPC_SumarJugador
+  - RPC_ForzarReinicio
+  - RPC_LimpiarYReiniciar
   DisableAutoOpenWizard: 1
   ShowSettings: 1
   DevRegionSetOnce: 0

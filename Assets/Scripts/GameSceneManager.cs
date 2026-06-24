@@ -1,51 +1,46 @@
-using Photon.Pun;          // Libreria principal de Photon PUN
-using Photon.Realtime;     // Permite acceder a la informacion de los jugadores
-using UnityEngine;         // Libreria principal de Unity
+using System.Collections;  // ¡IMPORTANTE! Necesario para usar Corrutinas (IEnumerator)
+using Photon.Pun;
+using Photon.Realtime;
+using UnityEngine;
 
-// Clase encargada de generar el trompo correspondiente
-// cuando comienza la partida
 public class GameSceneManager : MonoBehaviour
 {
-    // Punto de aparicion del primer jugador
     public Transform spawn1;
-
-    // Punto de aparicion del segundo jugador
     public Transform spawn2;
-
-    // Lista con los nombres de los prefabs registrados en Photon
     public string[] prefabNames;
 
-    // Se ejecuta automaticamente al cargar la escena
     void Start()
     {
-        // Genera el trompo del jugador local
-        SpawnPlayer();
+        // En lugar de llamar a la función de golpe, iniciamos la corrutina
+        StartCoroutine(SpawnPlayerConRetraso());
     }
 
-    // Crea el trompo correspondiente al jugador
-    void SpawnPlayer()
+    IEnumerator SpawnPlayerConRetraso()
     {
-        // Obtiene el indice del trompo seleccionado anteriormente
-        // desde las propiedades personalizadas del jugador
-        int topIndex =
-            (int)PhotonNetwork.LocalPlayer.CustomProperties["TopIndex"];
+        // 1. Le damos medio segundo a Photon para que el Cliente termine de sincronizar la escena
+        yield return new WaitForSeconds(0.5f);
 
-        // Variable que almacenara el punto de aparicion
+        // 2. Seguro de vida: Esperamos hasta que Photon confirme que el jugador 
+        // tiene guardado su "TopIndex" antes de intentar leerlo.
+        while (!PhotonNetwork.LocalPlayer.CustomProperties.ContainsKey("TopIndex"))
+        {
+            yield return null; // Espera al siguiente frame y vuelve a preguntar
+        }
+
+        // 3. Ahora es 100% seguro leer la propiedad y crear el trompo
+        int topIndex = (int)PhotonNetwork.LocalPlayer.CustomProperties["TopIndex"];
+
         Transform spawn;
 
-        // Si el numero del jugador es 1 utilizara el primer spawn
         if (PhotonNetwork.LocalPlayer.ActorNumber == 1)
         {
             spawn = spawn1;
         }
         else
         {
-            // Todos los demas jugadores utilizaran el segundo spawn
             spawn = spawn2;
         }
 
-        // Crea el trompo en la red utilizando Photon
-        // Todos los jugadores conectados podran verlo
         PhotonNetwork.Instantiate(
             prefabNames[topIndex],
             spawn.position,

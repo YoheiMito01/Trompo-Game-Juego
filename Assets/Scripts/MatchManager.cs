@@ -5,7 +5,7 @@ using UnityEngine.SceneManagement;
 
 public class MatchManager : MonoBehaviourPunCallbacks
 {
-    public static MatchManager Instance; // Esto nos permite llamarlo desde el trompo fácilmente
+    public static MatchManager Instance;
 
     [Header("Interfaz Final")]
     public GameObject panelFinal;
@@ -23,20 +23,25 @@ public class MatchManager : MonoBehaviourPunCallbacks
     private int jugadoresVivos = 0;
     private bool partidaTerminada = false;
 
+    private string escenaDestino = ""; // Inicializamos vacío para evitar errores
+    private bool solicitandoSalida = false; // Control de seguridad
+
     private void Awake()
     {
         Instance = this;
-
-        // SOLUCIÓN BUG 1: Le recordamos a Photon en cada partida que los clientes 
-        // DEBEN obedecer y seguir al Host cuando este cambie o reinicie la escena.
         PhotonNetwork.AutomaticallySyncScene = true;
     }
 
     private void Start()
     {
         panelFinal.SetActive(false);
+        partidaTerminada = false;
 
-        // Control de botones: Los clientes solo pueden salir. El Host decide a dónde va la sala.
+        if (PhotonNetwork.InRoom)
+        {
+            jugadoresVivos = PhotonNetwork.CurrentRoom.PlayerCount;
+        }
+
         if (!PhotonNetwork.IsMasterClient)
         {
             botonRepetir.SetActive(false);
@@ -44,28 +49,11 @@ public class MatchManager : MonoBehaviourPunCallbacks
         }
     }
 
-    // El TopController llamará a esto al nacer
-    public void RegistrarTrompo()
-    {
-        // SOLUCIÓN BUG 2: Cambiamos RpcTarget.All por RpcTarget.AllBuffered
-        // "Buffered" significa que si un jugador tiene lag y tarda en cargar la pantalla, 
-        // cuando por fin entre a la partida, leerá todos los RPCs acumulados y 
-        // sumará correctamente a los jugadores vivos.
-        photonView.RPC("RPC_SumarJugador", RpcTarget.AllBuffered);
-    }
+    public void RegistrarTrompo() { }
 
-    [PunRPC]
-    void RPC_SumarJugador()
-    {
-        jugadoresVivos++;
-    }
-
-    // El TopController llamará a esto cuando su giro sea 0
     public void ReportarDerrota(int idJugadorPerdedor)
     {
         if (partidaTerminada) return;
-
-        // Aquí no usamos Buffered porque los jugadores ya están jugando y sincronizados.
         photonView.RPC("RPC_ProcesarEliminacion", RpcTarget.All, idJugadorPerdedor);
     }
 
@@ -74,16 +62,14 @@ public class MatchManager : MonoBehaviourPunCallbacks
     {
         jugadoresVivos--;
 
-        // 1. ¿Soy yo el que perdió? Muestro Derrota.
         if (PhotonNetwork.LocalPlayer.ActorNumber == idJugadorPerdedor)
         {
             MostrarPantalla(false);
         }
-        // 2. ¿Queda solo 1 vivo y NO fui yo el que perdió? Muestro Victoria.
         else if (jugadoresVivos <= 1)
         {
             MostrarPantalla(true);
-            partidaTerminada = true; // Evitamos que se ejecute dos veces
+            partidaTerminada = true;
         }
     }
 
@@ -94,19 +80,52 @@ public class MatchManager : MonoBehaviourPunCallbacks
         textoResultado.color = esVictoria ? Color.green : Color.red;
     }
 
-    // --- FUNCIONES PARA LOS BOTONES (Asígnalas en el Inspector) ---
+    // --- FUNCIONES PARA LOS BOTONES ---
 
     public void BotonSalir()
     {
-        PhotonNetwork.LeaveRoom(); // Desconecta de la sala
-        SceneManager.LoadScene(nombreEscenaMenu); // Te manda al menú offline
+        solicitandoSalida = true; // Confirmamos que este script dio la orden
+        escenaDestino = nombreEscenaMenu;
+
+        // Desconexión total. Así al volver al Menú, Photon se reconectará desde cero limpio.
+        PhotonNetwork.Disconnect();
     }
 
     public void BotonRepetir()
     {
         if (PhotonNetwork.IsMasterClient)
         {
-            // Gracias al AutomaticallySyncScene del Awake, esto jalará a todos los clientes.
+            // En lugar de cargar la escena de inmediato, le pedimos a todos 
+            // que limpien su basura de red primero.
+            photonView.RPC("RPC_LimpiarYReiniciar", RpcTarget.All);
+        }
+    }
+
+    [PunRPC]
+    void RPC_LimpiarYReiniciar()
+    {
+        // 1. Cada jugador elimina del servidor de Photon todo lo que haya creado (sus trompos)
+        PhotonNetwork.DestroyPlayerObjects(PhotonNetwork.LocalPlayer);
+
+        // 2. Apagamos el panel final
+        panelFinal.SetActive(false);
+
+        // 3. Ahora que el servidor está limpio, el Host da la orden de recargar la escena
+        if (PhotonNetwork.IsMasterClient)
+        {
+            PhotonNetwork.LoadLevel(SceneManager.GetActiveScene().name);
+        }
+    }
+
+    [PunRPC]
+    void RPC_ForzarReinicio()
+    {
+        // 1. Apagamos el panel de victoria/derrota para el cliente inmediatamente
+        panelFinal.SetActive(false);
+
+        // 2. Ejecutamos la carga del nivel
+        if (PhotonNetwork.IsMasterClient)
+        {
             PhotonNetwork.LoadLevel(SceneManager.GetActiveScene().name);
         }
     }
@@ -115,8 +134,27 @@ public class MatchManager : MonoBehaviourPunCallbacks
     {
         if (PhotonNetwork.IsMasterClient)
         {
-            // Carga la escena del Lobby para toda la sala
             PhotonNetwork.LoadLevel(nombreEscenaLobby);
+        }
+    }
+
+    // --- CALLBACKS DE SEGURIDAD ---
+
+    public override void OnLeftRoom()
+    {
+        // Solo cargamos la escena si ESTE script la pidió y no está vacía
+        if (solicitandoSalida && !string.IsNullOrEmpty(escenaDestino))
+        {
+            SceneManager.LoadScene(escenaDestino);
+        }
+    }
+
+    public override void OnDisconnected(Photon.Realtime.DisconnectCause cause)
+    {
+        // Si usamos BotonSalir, se activará esto en lugar de OnLeftRoom
+        if (solicitandoSalida && !string.IsNullOrEmpty(escenaDestino))
+        {
+            SceneManager.LoadScene(escenaDestino);
         }
     }
 }
