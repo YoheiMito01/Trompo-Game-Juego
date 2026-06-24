@@ -9,6 +9,10 @@ public class TopController : MonoBehaviourPun, IPunObservable
 
     private Rigidbody rb;
 
+    [Header("Effects")]
+    [Tooltip("Prefab del sistema de partículas para los choques")]
+    [SerializeField] private GameObject impactEffectPrefab;
+
     [Header("Audio")]
     [SerializeField] private AudioSource audioSource; // El componente que reproduce el sonido
     [SerializeField] private AudioClip[] sonidosDeChoque; // Lista de sonidos modificable en el Inspector
@@ -335,20 +339,35 @@ public class TopController : MonoBehaviourPun, IPunObservable
 
     private void OnCollisionEnter(Collision collision)
     {
-        // 1. Primero verificamos si lo que chocamos es realmente otro trompo.
-        // Esto lo hacen AMBOS jugadores en su pantalla local.
+        // Solo el dueño procesa el golpe para restar estamina y lanzar el evento de red
+        if (!photonView.IsMine) return;
+
         TopController otherTop = collision.gameObject.GetComponent<TopController>();
         if (otherTop == null) return;
 
-        // 2. ¡Efecto de sonido local! Como ambos ejecutan esta línea, 
-        // el Host y el Cliente escucharán un golpe en su pantalla de inmediato.
-        ReproducirSonidoAleatorio();
-
-        // 3. FILTRO DE RED: Solo el dueño del trompo disminuye su propia energía.
-        // Si no pusiéramos esto aquí, el trompo perdería el doble de puntos.
-        if (!photonView.IsMine) return;
-
+        // Restamos la estamina
         currentSpin -= 50f;
+
+        // Obtener la posición exacta donde los dos trompos se tocaron
+        Vector3 contactPoint = collision.GetContact(0).point;
+
+        // Le decimos a TODOS los jugadores conectados que reproduzcan el efecto en ese punto
+        photonView.RPC(nameof(RpcPlayImpactEffect), RpcTarget.All, contactPoint);
+    }
+
+    // Esta función se ejecuta en las pantallas de todos los jugadores al mismo tiempo
+    [PunRPC]
+    private void RpcPlayImpactEffect(Vector3 position)
+    {
+        if (impactEffectPrefab != null)
+        {
+            // Instanciamos el efecto visual en el punto de contacto
+            GameObject effect = Instantiate(impactEffectPrefab, position, Quaternion.identity);
+
+            // Destruimos el objeto del efecto después de 2 segundos para liberar memoria
+            // (Ajusta este tiempo según lo que dure la animación de tus partículas)
+            Destroy(effect, 2f);
+        }
     }
     private void ReproducirSonidoAleatorio()
     {

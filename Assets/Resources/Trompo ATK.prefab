@@ -101,6 +101,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 288b0c71560575546b87171cbbc09c26, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  impactEffectPrefab: {fileID: 4149198874537636418, guid: ea9592fda5bbbec438d4ea8d2c8caae4, type: 3}
   audioSource: {fileID: 3089934377939885785}
   sonidosDeChoque:
   - {fileID: 8300000, guid: c9fa3f41e6f51c846ac292c1be794b0a, type: 3}
