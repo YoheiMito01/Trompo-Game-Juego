@@ -1977,9 +1977,10 @@ MonoBehaviour:
   - Arena Laser
   descriptions:
   - La arena basica para cualquier fan de trompos, solo enfrenta a tus rivales en
-    duelos rapidos, aunque debes mirar arriba de vez en cuando
-  - Una arena mas peligrosa, poderosos lasers apareceran y debes esquivarlos si no
-    quieres ser destruido al instante
+    duelos rapidos, cubos caeran del cielo que te empujaran si te acercas mucho
+  - Una arena mas extravagante, el espacio es mas reducido, el terreno es mas irregular
+    y lasers apareceran durante el enfrentamiento, esquivalos si no te quieres quedan
+    sin estamina
   sceneNames:
   - GameBase
   - EstadioLaser

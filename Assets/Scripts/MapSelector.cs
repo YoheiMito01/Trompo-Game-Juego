@@ -105,8 +105,13 @@ public class MapSelector : MonoBehaviourPun
     {
         if (PhotonNetwork.IsMasterClient)
         {
-            // Carga la escena correspondiente al índice actual
-            PhotonNetwork.LoadLevel(sceneNames[currentIndex]);
+            // 1. Guardamos el nombre de la arena elegida en las propiedades de la sala
+            ExitGames.Client.Photon.Hashtable roomProps = new ExitGames.Client.Photon.Hashtable();
+            roomProps.Add("MapaElegido", sceneNames[currentIndex]);
+            PhotonNetwork.CurrentRoom.SetCustomProperties(roomProps);
+
+            // 2. Cargamos la escena intermedia (Asegúrate de que se llame exactamente así en Unity)
+            PhotonNetwork.LoadLevel("EscenaTutorial");
         }
     }
 
